@@ -1,0 +1,56 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# CodeIgniter 4
+bubblewash-app/writable/logs/*
+!bubblewash-app/writable/logs/index.html
+bubblewash-app/writable/cache/*
+!bubblewash-app/writable/cache/index.html
+bubblewash-app/writable/session/*
+!bubblewash-app/writable/session/index.html
+bubblewash-app/writable/uploads/*
+!bubblewash-app/writable/uploads/index.html
+bubblewash-app/writable/debugbar/*
+!bubblewash-app/writable/debugbar/index.html
+
+# Environment files
+bubblewash-app/.env
+bubblewash-app/env
+
+# Composer
+bubblewash-app/vendor/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
