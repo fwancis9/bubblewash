@@ -1,23 +1,21 @@
 <?= $this->include('templates/header', ['title' => 'Admin Panel']) ?>
 
 <div class="container">
-    <!-- Success/Error Messages -->
     <?php if (session()->getFlashdata('success')): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <?= esc(session()->getFlashdata('success')) ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
     
     <?php if (session()->getFlashdata('error')): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <?= esc(session()->getFlashdata('error')) ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
 
     <?php if (isset($isLoggedIn) && $isLoggedIn): ?>
-        <!-- Admin Dashboard - Logged In -->
         <div class="row">
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -30,7 +28,6 @@
             </div>
         </div>
 
-        <!-- Users Table -->
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -72,63 +69,63 @@
                                     </tbody>
                                 </table>
                             </div>
+                            
+                            <?php if (isset($pager) && $pager->getPageCount() > 1): ?>
+                                <?php 
+                                    $currentPage = $pager->getCurrentPage();
+                                    $totalPages = $pager->getPageCount();
+                                ?>
+                                <div class="d-flex justify-content-center mt-4">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination">
+                                            <?php if ($currentPage > 1): ?>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page=<?= $currentPage - 1 ?>" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                            <?php else: ?>
+                                                <li class="page-item disabled">
+                                                    <span class="page-link" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </span>
+                                                </li>
+                                            <?php endif; ?>
+
+                                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                                <?php if ($i == $currentPage): ?>
+                                                    <li class="page-item active">
+                                                        <span class="page-link"><?= $i ?></span>
+                                                    </li>
+                                                <?php else: ?>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                                                    </li>
+                                                <?php endif; ?>
+                                            <?php endfor; ?>
+
+                                            <?php if ($currentPage < $totalPages): ?>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page=<?= $currentPage + 1 ?>" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            <?php else: ?>
+                                                <li class="page-item disabled">
+                                                    <span class="page-link" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </span>
+                                                </li>
+                                            <?php endif; ?>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            <?php endif; ?>
                         <?php else: ?>
                             <div class="alert alert-info">
                                 <i class="bi bi-info-circle"></i> No users registered yet.
                             </div>
                         <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    <?php else: ?>
-        <!-- Admin Login Form -->
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="card shadow">
-                    <div class="card-header text-center">
-                        <h4 class="text-primary">Admin Login</h4>
-                    </div>
-                    <div class="card-body">
-                        <form method="post" action="<?= base_url('admin') ?>">
-                            <?= csrf_field() ?>
-                            
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" 
-                                       value="<?= old('username') ?>" required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                            
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Login</button>
-                            </div>
-                        </form>
-
-                        <!-- Error Display -->
-                        <?php if (isset($errors) && !empty($errors)): ?>
-                            <div class="alert alert-danger mt-3">
-                                <ul class="mb-0">
-                                    <?php foreach ($errors as $error): ?>
-                                        <li><?= esc($error) ?></li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Demo Credentials -->
-                        <div class="mt-3">
-                            <small class="text-muted">
-                                <strong>Demo Credentials:</strong><br>
-                                Username: admin<br>
-                                Password: admin123
-                            </small>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -14,27 +14,21 @@ class UserModel extends Model
     protected $protectFields = true;
     protected $allowedFields = ['email', 'password', 'created_at', 'updated_at'];
 
-    // Dates
     protected $useTimestamps = true;
     protected $dateFormat = 'datetime';
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
     protected $deletedField = 'deleted_at';
 
-    // Validation
     protected $validationRules = [];
     protected $validationMessages = [];
     protected $skipValidation = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert = ['hashPassword'];
     protected $beforeUpdate = ['hashPassword'];
 
-    /**
-     * Hash password before saving to database
-     */
     protected function hashPassword(array $data)
     {
         if (isset($data['data']['password'])) {
@@ -44,14 +38,10 @@ class UserModel extends Model
         return $data;
     }
 
-    /**
-     * Create users table if it doesn't exist
-     */
     public function createTableIfNotExists()
     {
         $db = \Config\Database::connect();
         
-        // Check if table exists
         if (!$db->tableExists('users')) {
             $sql = "CREATE TABLE `users` (
                 `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -67,17 +57,11 @@ class UserModel extends Model
         }
     }
 
-    /**
-     * Find user by email
-     */
     public function findByEmail(string $email)
     {
         return $this->where('email', $email)->first();
     }
 
-    /**
-     * Verify user password
-     */
     public function verifyPassword(string $password, string $hash): bool
     {
         return password_verify($password, $hash);

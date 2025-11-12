@@ -14,9 +14,9 @@
                         <?= csrf_field() ?>
                         
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="email" name="email" 
-                                   placeholder="Enter your email" value="<?= old('email') ?>" required>
+                            <label for="email" class="form-label">Email address or Username</label>
+                            <input type="text" class="form-control" id="email" name="email" 
+                                   placeholder="Enter your email or username" value="<?= old('email') ?>" required>
                         </div>
                         
                         <div class="mb-3">
@@ -29,7 +29,6 @@
                             <button type="submit" class="btn btn-primary">Sign In</button>
                         </div>
                         
-                        <!-- Display login errors -->
                         <?php if (isset($errors) && !empty($errors)): ?>
                             <div class="alert alert-danger mt-3">
                                 <ul class="mb-0">
@@ -43,11 +42,18 @@
 
                     <hr class="my-4">
                     
+                    <div class="text-center mb-3">
+                        <div class="alert alert-info py-2">
+                            <small class="text-muted">
+                                <strong>Admin Login:</strong><br>
+                                Username: <code>admin</code><br>
+                                Password: <code>admin</code>
+                            </small>
+                        </div>
+                    </div>
+                    
                     <div class="text-center">
                         <p class="mb-0">Don't have an account? <a href="/register" class="text-decoration-none">Sign up here</a></p>
-                        <small class="text-muted">
-                            <a href="#" class="text-decoration-none">Forgot your password?</a>
-                        </small>
                     </div>
                 </div>
             </div>
