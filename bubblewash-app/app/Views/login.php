@@ -10,6 +10,26 @@
                         <p class="text-muted">Sign in to your account</p>
                     </div>
 
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <div class="alert alert-success">
+                            <?= session()->getFlashdata('success') ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (session()->getFlashdata('error')): ?>
+                        <div class="alert alert-info">
+                            <?= session()->getFlashdata('error') ?>
+                            <?php if (session()->get('pending_verification_email')): ?>
+                                <br><small>Didn't receive the email? 
+                                    <form method="post" action="<?= base_url('login/resend') ?>" class="d-inline">
+                                        <?= csrf_field() ?>
+                                        <button type="submit" class="btn btn-link p-0 align-baseline alert-link" style="text-decoration: underline;">Resend verification email</button>
+                                    </form>
+                                </small>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+
                     <form method="post" action="<?= base_url('login') ?>">
                         <?= csrf_field() ?>
                         

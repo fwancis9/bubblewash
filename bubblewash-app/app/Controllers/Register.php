@@ -35,9 +35,58 @@ class Register extends BaseController
         
         try {
             $userModel->save($data);
-            return redirect()->to('/login')->with('success', 'Registration successful! Please login.');
+            $userId = $userModel->getInsertID();
+            
+            // Generate verification token and send email
+            $emailController = new \App\Controllers\Email();
+            $token = $emailController->generateVerificationToken($userId);
+            $emailController->sendVerificationEmail($data['email'], $token);
+            
+            // Store email in session for resend functionality
+            session()->set('pending_verification_email', $data['email']);
+            
+            return redirect()->to('/register')
+                ->with('success', 'Registration successful! A verification email has been sent to your email address. Please check your inbox and click the verification link.');
         } catch (\Exception $e) {
             return view('register', ['error' => 'Registration failed. Please try again.']);
+        }
+    }
+    
+    /**
+     * Resend verification email
+     */
+    public function postResend()
+    {
+        $email = session()->get('pending_verification_email');
+        
+        if (!$email) {
+            return redirect()->to('/register')->with('error', 'No pending verification found.');
+        }
+        
+        $userModel = new \App\Models\UserModel();
+        $user = $userModel->findByEmail($email);
+        
+        if (!$user) {
+            session()->remove('pending_verification_email');
+            return redirect()->to('/register')->with('error', 'User not found.');
+        }
+        
+        // Check if already verified
+        $emailController = new \App\Controllers\Email();
+        if ($emailController->isEmailVerified($user['id'])) {
+            session()->remove('pending_verification_email');
+            return redirect()->to('/login')->with('success', 'Email is already verified. You can login now.');
+        }
+        
+        // Generate new token and send email
+        try {
+            $token = $emailController->generateVerificationToken($user['id']);
+            $emailController->sendVerificationEmail($email, $token);
+            
+            return redirect()->to('/register')
+                ->with('success', 'Verification email sent! Please check your inbox and click the verification link.');
+        } catch (\Exception $e) {
+            return redirect()->to('/register')->with('error', 'Failed to send verification email. Please try again.');
         }
     }
 }

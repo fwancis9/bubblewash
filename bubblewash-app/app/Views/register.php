@@ -10,6 +10,26 @@
                         <p class="text-muted">Join BubbleWash today</p>
                     </div>
 
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <div class="alert alert-success">
+                            <?= session()->getFlashdata('success') ?>
+                            <?php if (session()->get('pending_verification_email')): ?>
+                                <br><small>Didn't receive the email? 
+                                    <form method="post" action="<?= base_url('register/resend') ?>" class="d-inline">
+                                        <?= csrf_field() ?>
+                                        <button type="submit" class="btn btn-link p-0 align-baseline alert-link" style="text-decoration: underline;">Resend verification email</button>
+                                    </form>
+                                </small>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($error)): ?>
+                        <div class="alert alert-danger">
+                            <?= esc($error) ?>
+                        </div>
+                    <?php endif; ?>
+
                     <form method="post" action="<?= base_url('register') ?>">
                         <?= csrf_field() ?>
                         
@@ -31,6 +51,10 @@
                                    placeholder="Confirm password" required>
                         </div>
                         
+                        <div class="alert alert-info">
+                            <small><strong>Note:</strong> After registration, you'll receive a verification email. Please verify your email to activate your account.</small>
+                        </div>
+
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Create Account</button>
                         </div>

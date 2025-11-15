@@ -12,7 +12,7 @@ class UserModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['email', 'password', 'created_at', 'updated_at'];
+    protected $allowedFields = ['email', 'password', 'is_verified', 'verification_token', 'token_expires_at', 'created_at', 'updated_at'];
 
     protected $useTimestamps = true;
     protected $dateFormat = 'datetime';
@@ -47,10 +47,14 @@ class UserModel extends Model
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `email` varchar(255) NOT NULL,
                 `password` varchar(255) NOT NULL,
+                `is_verified` tinyint(1) DEFAULT 0,
+                `verification_token` varchar(255) DEFAULT NULL,
+                `token_expires_at` datetime DEFAULT NULL,
                 `created_at` datetime DEFAULT NULL,
                 `updated_at` datetime DEFAULT NULL,
                 PRIMARY KEY (`id`),
-                UNIQUE KEY `email` (`email`)
+                UNIQUE KEY `email` (`email`),
+                KEY `verification_token` (`verification_token`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
             
             $db->query($sql);
