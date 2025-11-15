@@ -49,10 +49,8 @@ class Login extends BaseController
         $userModel = new \App\Models\UserModel();
         $user = $userModel->findByEmail($email);
         if ($user && $userModel->verifyPassword($password, $user['password'])) {
-            // Check if email is verified
             $emailController = new \App\Controllers\Email();
             if (!$emailController->isEmailVerified($user['id'])) {
-                // Store email in session for resend functionality
                 session()->set('pending_verification_email', $user['email']);
                 
                 return redirect()->to('/login')
@@ -71,9 +69,6 @@ class Login extends BaseController
         }
     }
     
-    /**
-     * Resend verification email
-     */
     public function postResend()
     {
         $email = session()->get('pending_verification_email');
@@ -90,14 +85,12 @@ class Login extends BaseController
             return redirect()->to('/login')->with('error', 'User not found.');
         }
         
-        // Check if already verified
         $emailController = new \App\Controllers\Email();
         if ($emailController->isEmailVerified($user['id'])) {
             session()->remove('pending_verification_email');
             return redirect()->to('/login')->with('success', 'Email is already verified. You can login now.');
         }
         
-        // Generate new token and send email
         try {
             $token = $emailController->generateVerificationToken($user['id']);
             $emailController->sendVerificationEmail($email, $token);

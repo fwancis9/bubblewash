@@ -4,9 +4,6 @@ namespace App\Controllers;
 
 class Email extends BaseController
 {
-    /**
-     * Get the email service initialized with config
-     */
     private function getEmailService()
     {
         $email = service('email');
@@ -27,9 +24,6 @@ class Email extends BaseController
         return ['email' => $email, 'config' => $emailConfig];
     }
 
-    /**
-     * Generate verification email HTML template
-     */
     private function getVerificationEmailTemplate(string $verificationUrl): string
     {
         return '
@@ -136,33 +130,22 @@ class Email extends BaseController
         </html>';
     }
 
-    /**
-     * Send verification email with token
-     * 
-     * @param string $toEmail Recipient email address
-     * @param string $token Verification token
-     * @return bool|array Returns true on success, or error array on failure
-     */
     public function sendVerificationEmail(string $toEmail, string $token)
     {
         $emailService = $this->getEmailService();
         $email = $emailService['email'];
         $emailConfig = $emailService['config'];
 
-        // Build verification URL with token (separate endpoint for token verification)
-        $baseUrl = rtrim(base_url(), '/'); // Remove trailing slash if present
+        $baseUrl = rtrim(base_url(), '/');
         $verificationUrl = $baseUrl . '/verify-from-email?token=' . urlencode($token);
 
-        // Set email details
         $email->setFrom($emailConfig->fromEmail, $emailConfig->fromName);
         $email->setTo($toEmail);
         $email->setSubject('Verify Your BubbleWash Account');
         
-        // Use template with actual token
         $message = $this->getVerificationEmailTemplate($verificationUrl);
         $email->setMessage($message);
 
-        // Try to send the email
         if ($email->send()) {
             return true;
         } else {
@@ -174,17 +157,11 @@ class Email extends BaseController
         }
     }
 
-    /**
-     * Generate a verification token for the user
-     * 
-     * @param int $userId User ID
-     * @return string Verification token
-     */
     public function generateVerificationToken(int $userId): string
     {
         $userModel = new \App\Models\UserModel();
-        $token = bin2hex(random_bytes(32)); // 64 character token
-        $expiresAt = date('Y-m-d H:i:s', strtotime('+24 hours')); // Token expires in 24 hours
+        $token = bin2hex(random_bytes(32));
+        $expiresAt = date('Y-m-d H:i:s', strtotime('+24 hours'));
         
         $userModel->update($userId, [
             'verification_token' => $token,
@@ -194,12 +171,6 @@ class Email extends BaseController
         return $token;
     }
 
-    /**
-     * Verify a user's email using the token
-     * 
-     * @param string $token Verification token
-     * @return array|false Returns user data on success, false on failure
-     */
     public function verifyEmail(string $token)
     {
         $userModel = new \App\Models\UserModel();
@@ -208,7 +179,6 @@ class Email extends BaseController
                           ->first();
         
         if ($user) {
-            // Mark as verified and clear token
             $userModel->update($user['id'], [
                 'is_verified' => 1,
                 'verification_token' => null,
@@ -221,12 +191,6 @@ class Email extends BaseController
         return false;
     }
 
-    /**
-     * Check if user's email is verified
-     * 
-     * @param int $userId User ID
-     * @return bool
-     */
     public function isEmailVerified(int $userId): bool
     {
         $userModel = new \App\Models\UserModel();

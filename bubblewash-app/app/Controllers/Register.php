@@ -37,12 +37,10 @@ class Register extends BaseController
             $userModel->save($data);
             $userId = $userModel->getInsertID();
             
-            // Generate verification token and send email
             $emailController = new \App\Controllers\Email();
             $token = $emailController->generateVerificationToken($userId);
             $emailController->sendVerificationEmail($data['email'], $token);
             
-            // Store email in session for resend functionality
             session()->set('pending_verification_email', $data['email']);
             
             return redirect()->to('/register')
@@ -52,9 +50,6 @@ class Register extends BaseController
         }
     }
     
-    /**
-     * Resend verification email
-     */
     public function postResend()
     {
         $email = session()->get('pending_verification_email');
@@ -71,14 +66,12 @@ class Register extends BaseController
             return redirect()->to('/register')->with('error', 'User not found.');
         }
         
-        // Check if already verified
         $emailController = new \App\Controllers\Email();
         if ($emailController->isEmailVerified($user['id'])) {
             session()->remove('pending_verification_email');
             return redirect()->to('/login')->with('success', 'Email is already verified. You can login now.');
         }
         
-        // Generate new token and send email
         try {
             $token = $emailController->generateVerificationToken($user['id']);
             $emailController->sendVerificationEmail($email, $token);
