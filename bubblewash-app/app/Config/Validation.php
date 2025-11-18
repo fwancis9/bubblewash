@@ -109,4 +109,37 @@ class Validation extends BaseConfig
             ]
         ]
     ];
+
+    public array $forgotPasswordRules = [
+        'email' => [
+            'rules' => 'required|valid_email',
+            'errors' => [
+                'required'    => 'Please enter your email address.',
+                'valid_email' => 'Please enter a valid email address.'
+            ]
+        ]
+    ];
+
+    public array $resetPasswordRules = [
+        'token' => [
+            'rules' => 'required',
+            'errors' => [
+                'required' => 'Reset token is required.'
+            ]
+        ],
+        'password' => [
+            'rules' => 'required|min_length[8]',
+            'errors' => [
+                'required'   => 'Password is required.',
+                'min_length' => 'Password must be at least 8 characters long.'
+            ]
+        ],
+        'confirm_password' => [
+            'rules' => 'required|matches[password]',
+            'errors' => [
+                'required' => 'Please confirm your password.',
+                'matches'  => 'Passwords do not match.'
+            ]
+        ]
+    ];
 }

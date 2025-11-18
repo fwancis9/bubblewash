@@ -34,23 +34,12 @@ class ResetPassword extends BaseController
 
     public function postIndex()
     {
-        $token = $this->request->getPost('token');
-        $password = $this->request->getPost('password');
-        $confirmPassword = $this->request->getPost('confirm_password');
-
-        if (!$token || !$password || !$confirmPassword) {
-            return redirect()->back()->with('error', 'All fields are required.');
+        if (!$this->validate('resetPasswordRules')) {
+            $errors = $this->validator->getErrors();
+            return redirect()->back()->with('error', implode(' ', $errors));
         }
 
-        $token = trim($token);
-
-        if ($password !== $confirmPassword) {
-            return redirect()->back()->with('error', 'Passwords do not match.');
-        }
-
-        if (strlen($password) < 6) {
-            return redirect()->back()->with('error', 'Password must be at least 6 characters long.');
-        }
+        $token = trim($this->request->getPost('token'));
 
         $emailController = new \App\Controllers\Email();
         $user = $emailController->verifyPasswordResetToken($token);
@@ -58,6 +47,8 @@ class ResetPassword extends BaseController
         if (!$user) {
             return redirect()->to('/forgot-password')->with('error', 'This reset link is invalid or has expired. Please request a new one.');
         }
+
+        $password = $this->request->getPost('password');
 
         $userModel = new \App\Models\UserModel();
         $userModel->update($user['id'], [

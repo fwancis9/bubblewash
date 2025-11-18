@@ -22,11 +22,12 @@ class ForgotPassword extends BaseController
 
     public function postIndex()
     {
-        $email = $this->request->getPost('email');
-
-        if (!$email) {
-            return redirect()->back()->with('error', 'Please enter your email address.');
+        if (!$this->validate('forgotPasswordRules')) {
+            $errors = $this->validator->getErrors();
+            return redirect()->back()->with('error', implode(' ', $errors));
         }
+
+        $email = $this->request->getPost('email');
 
         $userModel = new \App\Models\UserModel();
         $user = $userModel->where('email', $email)->first();
