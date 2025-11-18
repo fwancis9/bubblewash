@@ -13,7 +13,7 @@ class VerifyFromEmail extends BaseController
         $token = $this->request->getGet('token');
 
         if (!$token) {
-            return view('invalidExpiredVerification');
+            return view('invalid_expired_verification');
         }
 
         $emailController = new \App\Controllers\Email();
@@ -21,7 +21,7 @@ class VerifyFromEmail extends BaseController
 
         if ($user) {
             if (!isset($user['id']) || empty($user['id'])) {
-                return view('invalidExpiredVerification');
+                return view('invalid_expired_verification');
             }
 
             session()->remove('pending_verification_email');
@@ -29,7 +29,7 @@ class VerifyFromEmail extends BaseController
             return redirect()->to('/login')
                 ->with('success', 'Email verified successfully! You can now login.');
         } else {
-            return view('invalidExpiredVerification');
+            return view('invalid_expired_verification');
         }
     }
 }

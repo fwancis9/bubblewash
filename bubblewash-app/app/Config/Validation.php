@@ -95,4 +95,18 @@ class Validation extends BaseConfig
             ]
         ]
     ];
+
+    public array $profilePictureRules = [
+        'profile_picture' => [
+            'label' => 'Profile Picture',
+            'rules' => 'uploaded[profile_picture]|is_image[profile_picture]|mime_in[profile_picture,image/jpg,image/jpeg,image/gif,image/png,image/webp]|max_size[profile_picture,2048]|max_dims[profile_picture,4000,4000]',
+            'errors' => [
+                'uploaded' => 'Please select a profile picture to upload.',
+                'is_image' => 'The file must be an image.',
+                'mime_in' => 'Only JPG, JPEG, PNG, GIF, and WEBP images are allowed.',
+                'max_size' => 'The image size must not exceed 2MB.',
+                'max_dims' => 'The image dimensions must not exceed 4000x4000 pixels.'
+            ]
+        ]
+    ];
 }

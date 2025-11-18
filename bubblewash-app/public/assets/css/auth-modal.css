@@ -1,0 +1,110 @@
+/* Shared SweetAlert2 styling for login and register pages */
+.swal2-popup {
+    backdrop-filter: blur(10px) !important;
+    background-color: rgba(255, 255, 255, 0.92) !important;
+    border-radius: 1.1rem !important;
+    outline: 1px solid rgba(255, 255, 255, 0.85) !important;
+    outline-offset: 4px !important;
+    box-shadow: 0 12px 20px rgba(31, 95, 114, 0.18) !important;
+    position: relative;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 2rem 1.5rem !important;
+}
+
+.swal2-popup::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0.95rem;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.swal2-icon,
+.swal2-title,
+.swal2-html-container,
+.swal2-actions {
+    position: relative;
+    z-index: 1;
+}
+
+.swal2-icon {
+    margin: 0 auto !important;
+}
+
+.swal2-title {
+    color: #1f5f72 !important;
+    font-weight: 700 !important;
+}
+
+.swal2-html-container {
+    color: #6c757d !important;
+}
+
+.swal2-confirm {
+    background-color: #1f5f72 !important;
+    border: none !important;
+    border-radius: 2rem !important;
+    padding: 0.5rem 1.5rem !important;
+    font-size: 0.9rem !important;
+}
+
+.swal2-confirm:hover {
+    background-color: #164557 !important;
+}
+
+.swal2-icon.swal2-success {
+    border-color: #1f5f72 !important;
+    color: #1f5f72 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.swal2-icon.swal2-success [class^='swal2-success-line'] {
+    background-color: #1f5f72 !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+    border-color: rgba(31, 95, 114, 0.3) !important;
+}
+
+.swal2-success-circular-line-left,
+.swal2-success-circular-line-right,
+.swal2-success-fix {
+    background-color: transparent !important;
+}
+
+.swal2-icon.swal2-error {
+    border-color: #b02a37 !important;
+    color: #b02a37 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+}
+
+.swal2-icon.swal2-error [class^='swal2-x-mark-line'] {
+    background-color: #b02a37 !important;
+    position: absolute !important;
+}
+
+.swal2-icon.swal2-error .swal2-x-mark-line-left {
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) rotate(45deg) !important;
+}
+
+.swal2-icon.swal2-error .swal2-x-mark-line-right {
+    right: 50% !important;
+    top: 50% !important;
+    transform: translate(50%, -50%) rotate(-45deg) !important;
+}
+

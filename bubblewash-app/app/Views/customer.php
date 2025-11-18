@@ -1,4 +1,4 @@
-<?= $this->include('templates/header', ['title' => 'Home']) ?>
+<?= $this->include('templates/header', ['title' => 'Dashboard']) ?>
 
 <?php
     $logoImage        = base_url('assets/images/bubblewash_logo_1.png');
@@ -140,25 +140,96 @@
         margin: 0 auto 1rem auto;
         object-fit: contain;
     }
+
+    .nav-buttons {
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-buttons.left {
+        background-color: #1f5f72;
+        border-radius: 2rem;
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .nav-buttons.right {
+        background-color: #1f5f72;
+        border-radius: 2rem;
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .nav-btn {
+        color: #fff;
+        padding: 0.5rem 1.5rem;
+        border-radius: 2rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: none;
+        background: transparent;
+    }
+
+    .nav-buttons.left .nav-btn {
+        background-color: transparent;
+    }
+
+    .nav-buttons.left .nav-btn.active {
+        background-color: #fff;
+        color: #1f5f72;
+    }
+
+    .nav-buttons.right .nav-btn {
+        background-color: transparent;
+    }
+
+    .nav-buttons.right .nav-btn.active {
+        background-color: #fff;
+        color: #1f5f72;
+    }
+
+    .branding-nav-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 991px) {
+        .branding-nav-wrapper {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .nav-buttons {
+            justify-content: center;
+        }
+    }
 </style>
 
 <section class="home-hero position-relative overflow-hidden text-center text-white d-flex align-items-stretch p-0">
     <div class="position-relative container p-0">
         <div class="row justify-content-center g-0">
             <div class="col-12 col-lg-11 col-xl-9 hero-column">
-                <a href="<?= site_url('/') ?>">
-                    <img src="<?= $brandLogo ?>" alt="BubbleWash" class="home-logo img-fluid mx-auto" style="cursor: pointer;">
-                </a>
+                <div class="branding-nav-wrapper">
+                    <div class="nav-buttons left">
+                        <a href="<?= site_url('customer/weighted') ?>" class="nav-btn <?= ($activeSection === 'weighted') ? 'active' : '' ?>">Weighted</a>
+                        <a href="<?= site_url('customer/package') ?>" class="nav-btn <?= ($activeSection === 'package') ? 'active' : '' ?>">Package</a>
+                    </div>
+                    <a href="<?= site_url('/') ?>">
+                        <img src="<?= $brandLogo ?>" alt="BubbleWash" class="home-logo img-fluid" style="cursor: pointer;">
+                    </a>
+                    <div class="nav-buttons right">
+                        <a href="<?= site_url('customer/my-bubbles') ?>" class="nav-btn <?= ($activeSection === 'my_bubbles') ? 'active' : '' ?>">My Bubbles</a>
+                        <a href="<?= site_url('customer/my-profile') ?>" class="nav-btn <?= ($activeSection === 'my_profile') ? 'active' : '' ?>">My Profile</a>
+                    </div>
+                </div>
                 <div class="card border-0 shadow-lg overflow-hidden hero-card">
                     <div class="card-body p-4 p-lg-5 text-center text-dark">
-                        <img src="<?= $washerIllustration ?>" alt="BubbleWash washing machine illustration" class="hero-illustration img-fluid">
-                        <p class="text-uppercase fw-semibold text-brand mb-2 letter-spacing-lg">Laundry • Pickup • Care</p>
-                        <h1 class="fw-bold mb-3 text-brand">Effortless care for the garments you love</h1>
-                        <p class="text-muted mb-4">From delicate fabrics to everyday essentials, BubbleWash keeps your wardrobe fresh with premium wash-and-fold and expert laundry services. Schedule your pickup today!</p>
-                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-                            <a href="<?= site_url('login') ?>" class="btn btn-brand btn-lg px-4 rounded-pill">Log In</a>
-                            <a href="<?= site_url('register') ?>" class="btn btn-brand-outline btn-lg px-4 rounded-pill">Get Started</a>
-                        </div>
+                        <?= $this->include('templates/customer/' . $activeSection) ?>
                     </div>
                 </div>
             </div>
@@ -167,3 +238,4 @@
 </section>
 
 <?= $this->include('templates/footer') ?>
+

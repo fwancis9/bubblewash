@@ -6,6 +6,10 @@ class Register extends BaseController
 {
     public function getIndex()
     {
+        if (session()->get('admin_logged_in')) {
+            return redirect()->to('/admin');
+        }
+        
         if (session()->get('logged_in')) {
             return redirect()->to('/');
         }
@@ -15,6 +19,10 @@ class Register extends BaseController
     
     public function postIndex()
     {
+        if (session()->get('admin_logged_in')) {
+            return redirect()->to('/admin');
+        }
+        
         if (session()->get('logged_in')) {
             return redirect()->to('/');
         }

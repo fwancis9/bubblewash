@@ -4,14 +4,16 @@ namespace App\Controllers;
 
 class Home extends BaseController
 {
-    public function getIndex(): string
+    public function getIndex()
     {
-        $isLoggedIn = session()->get('logged_in') ?? false;
-        $userEmail = session()->get('user_email') ?? null;
+        if (session()->get('admin_logged_in')) {
+            return redirect()->to('/admin');
+        }
         
-        return view('home', [
-            'isLoggedIn' => $isLoggedIn,
-            'userEmail' => $userEmail
-        ]);
+        if (session()->get('logged_in')) {
+            return redirect()->to('/customer');
+        }
+        
+        return view('home');
     }
 }

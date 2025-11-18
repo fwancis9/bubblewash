@@ -12,7 +12,7 @@ class UserModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['email', 'password', 'is_verified', 'verification_token', 'token_expires_at', 'created_at', 'updated_at'];
+    protected $allowedFields = ['email', 'password', 'is_verified', 'verification_token', 'token_expires_at', 'reset_token', 'reset_token_expires_at', 'created_at', 'updated_at'];
 
     protected $useTimestamps = true;
     protected $dateFormat = 'datetime';
@@ -50,14 +50,28 @@ class UserModel extends Model
                 `is_verified` tinyint(1) DEFAULT 0,
                 `verification_token` varchar(255) DEFAULT NULL,
                 `token_expires_at` datetime DEFAULT NULL,
+                `reset_token` varchar(255) DEFAULT NULL,
+                `reset_token_expires_at` datetime DEFAULT NULL,
                 `created_at` datetime DEFAULT NULL,
                 `updated_at` datetime DEFAULT NULL,
                 PRIMARY KEY (`id`),
                 UNIQUE KEY `email` (`email`),
-                KEY `verification_token` (`verification_token`)
+                KEY `verification_token` (`verification_token`),
+                KEY `reset_token` (`reset_token`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
             
             $db->query($sql);
+        } else {
+            $fields = $db->getFieldNames('users');
+            
+            if (!in_array('reset_token', $fields)) {
+                $db->query("ALTER TABLE `users` ADD COLUMN `reset_token` varchar(255) DEFAULT NULL AFTER `token_expires_at`");
+                $db->query("ALTER TABLE `users` ADD INDEX `reset_token` (`reset_token`)");
+            }
+            
+            if (!in_array('reset_token_expires_at', $fields)) {
+                $db->query("ALTER TABLE `users` ADD COLUMN `reset_token_expires_at` datetime DEFAULT NULL AFTER `reset_token`");
+            }
         }
     }
 

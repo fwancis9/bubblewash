@@ -63,7 +63,7 @@ class Login extends BaseController
                 'logged_in' => true
             ]);
             
-            return redirect()->to('/')->with('success', 'Login successful!');
+            return redirect()->to('/customer')->with('success', 'Login successful!');
         } else {
             return view('login', ['errors' => ['Invalid email/username or password.']]);
         }
